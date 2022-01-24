@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
+        />
+
+        <style>
+            pre {
+                font-family: Arial, sans-serif;
+                color: black;
+            }
+        </style>
+    </head>
+
+    <body style="margin: 0px;">
+        <div style="background-color: rgb(255, 255, 255); height: 100vh; width: 100vw; margin: 0px;">
+        
+            <div id="myDiv" style="height: 300px; width: 500px; border:1px solid #000000;">
+                <canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;"></canvas>
+                <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+            </div>
+        
+        </div>
+        <div>
+        </div>
+
+        <script type="module">
+
+            function setCookie(cname, cvalue, exdays) {
+                var d = new Date();
+                // Default at 365 days.
+                exdays = exdays || 365;
+                // Get unix milliseconds at current time plus number of days
+                d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+                var expires = "expires=" + d.toUTCString();
+                // cvalue must be encoded because it can be utf-8
+                document.cookie = `${cname}=${encodeURIComponent(cvalue)};${expires};path=/`; // cname + "=" + cvalue + ";" + expires + ";path=/";
+                // console.log(document.cookie);
+                // username=Paulo Roma; __utma=30314110.38272483.1627839402.1627839402.1627839402.1; __utmc=30314110; __utmz=30314110.1627839402.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+            }
+
+            function deleteCookie(cname) {
+                document.cookie = `${cname}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+                // console.log(document.cookie);
+            }
+
+            function getCookie(cname) {
+                var name = cname.trimStart() + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(";");
+                let cookie = ca.find((row) => row.trim().startsWith(name));
+                return cookie == undefined ? "" : cookie.split("=")[1];
+            }
+
+
+            // getting parameters
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const windowHeight = urlParams.get("h");
+            const windowWidth = urlParams.get("w");
+
+            // setting canvas size
+            $("#myCanvas").attr("height", windowHeight);
+            $("#myCanvas").attr("width", windowWidth);          
+
+            //Jquery draggable Div
+            $("#myDiv").draggable();
+
+            // Getting range
+            const rangeInput = document.getElementById("myRange");
+            console.log(getCookie("rangeValue") + "n ta indo n em");
+            rangeInput.value = getCookie("rangeValue");
+
+            function calculateCircles() {
+                var slider = document.getElementById("myRange");
+                // number of circles
+                let ncircles = slider.value;
+
+                const canvas = document.getElementById("myCanvas");
+
+                let ctx = canvas.getContext("2d");
+
+                const w = canvas.width;
+                const h = canvas.height;
+                const n = ncircles;
+
+                const ratio = w/h;
+                const cols = Math.sqrt(n * ratio);
+                const rows = Math.ceil(n / cols);
+
+                // Melhor opção ocupando toda altura
+                {
+                    let _rows = Math.ceil(rows);
+                    let _cols = Math.ceil(n / _rows);
+
+                    if(_rows * ratio < _cols){
+                    const rowsRatio = _cols  / (_rows * ratio);
+                    _rows = Math.ceil(_rows * rowsRatio);
+                    _cols = Math.ceil(n / _rows);
+                    }
+
+                    var fullHeightSide = h / _rows;
+                }
+
+                // Melhor opção ocupando toda largura
+                {
+                    let _cols = Math.ceil(cols);
+                    let _rows = Math.ceil(n / _cols);
+
+                    if(_rows * ratio > _cols){
+                    const colsRatio = (_rows * ratio) / _cols;
+                    _cols = Math.ceil(_cols * colsRatio);
+                    _rows = Math.ceil(n / _cols);
+                    }
+
+                    var fullWidthSide = w / _cols;
+                }
+
+
+                // Finalmente 
+                let squareSide = Math.max(fullHeightSide, fullWidthSide);
+                
+                // My solution is identical to the code below...
+                let perRow = Math.floor(canvas.width / squareSide)
+                let circleRadius = squareSide / 4;
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.fillStyle = "black";
+                ctx.strokeStyle = "gray";
+                for (let i = 0; i < ncircles; i++) {
+                    let row = Math.floor(i/perRow);
+                    let col = i % perRow;
+                    let x = circleRadius * 2 + circleRadius*4*col; 
+                    let y = circleRadius * 2 + circleRadius*4*row; 
+                    ctx.beginPath ();
+                    ctx.arc (x,y,circleRadius,0,Math.PI*2)
+                    ctx.fill()
+                    ctx.beginPath ();
+                    ctx.moveTo(x-squareSide/2,y-squareSide/2);
+                    ctx.lineTo(x-squareSide/2,y+squareSide/2);
+                    ctx.lineTo(x+squareSide/2,y+squareSide/2);
+                    ctx.lineTo(x+squareSide/2,y-squareSide/2);
+                    ctx.closePath();
+                    ctx.stroke()
+                }
+            }
+
+
+            console.log(document.cookie);
+            
+            rangeInput.addEventListener("input", calculateCircles);
+            rangeInput.addEventListener("change", (obj) => {
+                setCookie("rangeValue",obj.target.value,30)
+            });
+
+            
+            
+        </script>
+    </body>
+</html>
