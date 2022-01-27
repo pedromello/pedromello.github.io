@@ -68,7 +68,7 @@
             // setting canvas size
             $("#myCanvas").attr("height", windowHeight);
             $("#myCanvas").attr("width", windowWidth);          
-
+            let test = 0;
             //Jquery draggable Div
             $("#myDiv").draggable();
 
@@ -167,7 +167,7 @@
             });
 
             const myDiv = document.getElementById("myDiv");
-            myDiv.addEventListener("mousedown", savePosition);
+            myDiv.addEventListener("mouseup", savePosition);
             
         </script>
     </body>
