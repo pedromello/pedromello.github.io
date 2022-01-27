@@ -71,10 +71,14 @@
 
             //Jquery draggable Div
             $("#myDiv").draggable();
-            console.log(getCookie("dragTop"));
-            console.log(getCookie("dragLeft"));
-            $("#myDiv").css({top: getCookie("dragTop"),
-                            left: getCookie("dragLeft")});
+            let top = getCookie("dragTop");
+            let left = getCookie("dragLeft");
+
+            console.log(top);
+            console.log(left);
+
+            $("#myDiv").css({top: Number(top),
+                            left: Number(left)});
 
             
             function savePosition() {
