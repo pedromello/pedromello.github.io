@@ -15,15 +15,58 @@
                 font-family: Arial, sans-serif;
                 color: black;
             }
+            .slidecontainer {
+                width: 100%;
+            }
+
+            .slider {
+                -webkit-appearance: none;
+                width: 100%;
+                height: 5px;
+                border-radius: 5px;
+                background: #000000;
+                outline: none;
+                opacity: 0.7;
+                -webkit-transition: .2s;
+                transition: opacity .2s;
+            }
+
+            .slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: #FFFFFF;
+                cursor: pointer;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #04AA6D;
+                cursor: pointer;
+            }
         </style>
     </head>
 
     <body style="margin: 0px;">
-        <div style="background-color: rgb(255, 255, 255); height: 100vh; width: 100vw; margin: 0px;">
+        <div style="background-color: #CCD788; height: 100vh; width: 100vw; margin: 0px;">
         
-            <div id="myDiv" style="height: 300px; width: 500px; border:1px solid #000000;">
-                <canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;"></canvas>
+            <div id="myDiv" style="height: fit-content; width: fit-content; display: flex; flex: content; flex-direction: column;">
+                <span id="wXh" style="align-self: center; font-weight: bold; font-size: x-large; color: #A52A2A;">
+                    </span>
+                <span id="aspectRatio" style="margin-bottom: 20px; align-self: center; font-weight: bold; font-size: x-large; color: #A52A2A;">
+                    </span>
+                <canvas id="myCanvas" width="200" height="100" style="border:4px solid #A52A2A; background-color: #FAEBD7;"></canvas>
+                <span id="inputLabel" style="margin-top: 45px; margin-bottom: 8px; align-self: center; font-weight: 600; font-size: large; color: #A52A2A;"></span>
                 <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+                <span style="margin-top: 30px; align-self: flex-end;"> 
+                        <a style="color: #007B00; font-weight: bolder; text-decoration: none;" target="_blank" href="https://observablehq.com/d/600df2eb8038e879">
+                            (Observable)
+                        </a>
+                    </span>
             </div>
         
         </div>
@@ -31,6 +74,14 @@
         </div>
 
         <script type="module">
+
+            function maxNumber(a, b) {
+                if(a > b) {
+                    return a;
+                } else {
+                    return b;
+                }
+            }
 
             function setCookie(cname, cvalue, exdays) {
                 var d = new Date();
@@ -66,8 +117,11 @@
             const windowWidth = urlParams.get("w");
 
             // setting canvas size
-            $("#myCanvas").attr("height", windowHeight);
-            $("#myCanvas").attr("width", windowWidth);          
+            $("#myCanvas").attr("height", windowHeight + "px");
+            $("#myCanvas").attr("width", windowWidth + "px");    
+
+            $("#wXh").html("Canvas: (" + windowWidth + "x" + windowHeight + ")");
+            $("#aspectRatio").html("Aspect ratio = " + (windowWidth / windowHeight).toFixed(2));
 
             //Jquery draggable Div
             $("#myDiv").draggable();
@@ -91,6 +145,8 @@
             // Getting range
             const rangeInput = document.getElementById("myRange");
             rangeInput.value = getCookie("rangeValue");
+
+            $("#inputLabel").html(rangeInput.value + " &#8804; (7X10)");
 
             function calculateCircles() {
                 var slider = document.getElementById("myRange");
@@ -167,7 +223,10 @@
             
             calculateCircles();
             
-            rangeInput.addEventListener("input", calculateCircles);
+            rangeInput.addEventListener("input", () => {
+                $("#inputLabel").html(rangeInput.value + " &#8804; (7X10)");
+                calculateCircles()
+            });
             rangeInput.addEventListener("change", (obj) => {
                 setCookie("rangeValue",obj.target.value,30)
             });
