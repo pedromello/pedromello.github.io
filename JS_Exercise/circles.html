@@ -113,8 +113,8 @@
             // getting parameters
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
-            const windowHeight = urlParams.get("h");
-            const windowWidth = urlParams.get("w");
+            const windowHeight = urlParams.get("h") || 640;
+            const windowWidth = urlParams.get("w") || 480;
 
             // setting canvas size
             $("#myCanvas").attr("height", windowHeight + "px");
