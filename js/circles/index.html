@@ -71,12 +71,15 @@
 
             //Jquery draggable Div
             $("#myDiv").draggable();
-            $("#myDiv").css(getCookie("dragPosition"));
-            
 
+            $("#myDiv").css({top: getCookie("dragTop"),
+                            left: getCookie("dragLeft")});
+
+            
             function savePosition() {
                 let dragPosition = $("#myDiv").offset();
-                setCookie("dragPosition", dragPosition, 30)
+                setCookie("dragTop", dragPosition.top, 30)
+                setCookie("dragLeft", dragPosition.left, 30)
             }
 
             // Getting range
