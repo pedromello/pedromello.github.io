@@ -68,16 +68,18 @@
             // setting canvas size
             $("#myCanvas").attr("height", windowHeight);
             $("#myCanvas").attr("width", windowWidth);          
-            let test = 0;
+
             //Jquery draggable Div
             $("#myDiv").draggable();
-
+            console.log(getCookie("dragTop"));
+            console.log(getCookie("dragLeft"));
             $("#myDiv").css({top: getCookie("dragTop"),
                             left: getCookie("dragLeft")});
 
             
             function savePosition() {
                 let dragPosition = $("#myDiv").offset();
+                console.log(dragPosition);
                 setCookie("dragTop", dragPosition.top, 30)
                 setCookie("dragLeft", dragPosition.left, 30)
             }
