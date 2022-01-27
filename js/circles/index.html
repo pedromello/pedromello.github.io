@@ -71,10 +71,16 @@
 
             //Jquery draggable Div
             $("#myDiv").draggable();
+            $("#myDiv").css(getCookie("dragPosition"));
+            
+
+            function savePosition() {
+                let dragPosition = $("#myDiv").offset();
+                setCookie("dragPosition", dragPosition, 30)
+            }
 
             // Getting range
             const rangeInput = document.getElementById("myRange");
-            console.log(getCookie("rangeValue") + "n ta indo n em");
             rangeInput.value = getCookie("rangeValue");
 
             function calculateCircles() {
@@ -149,16 +155,16 @@
                     ctx.stroke()
                 }
             }
-
-
-            console.log(document.cookie);
+            
+            calculateCircles();
             
             rangeInput.addEventListener("input", calculateCircles);
             rangeInput.addEventListener("change", (obj) => {
                 setCookie("rangeValue",obj.target.value,30)
             });
 
-            
+            const myDiv = document.getElementById("myDiv");
+            myDiv.addEventListener("mousedown", savePosition);
             
         </script>
     </body>
