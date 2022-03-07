@@ -18,25 +18,35 @@ var etapas = null
 var numeroDigitado = ''
 var votoEmBranco = false
 
-console.log("Atualizacao 2")
+function salvarVotos(votosObj) {
+  if(votosObj[0].numero == ""){
+    votosObj[0].numero = "\"BBBBB\""
+  } else if (votosObj[0].numero == null) {
+    votosObj[0].numero = "\"NNNNN\""
+  }
 
-const jqueryButton = document.querySelector(`#jquery-ajax`)
-jqueryButton.onclick = () => {
+  if(votosObj[1].numero == ""){
+    votosObj[1].numero = "\"BB\""
+  } else if (votosObj[1].numero == null) {
+    votosObj[1].numero = "\"NN\""
+  }
+
   jQuery.ajax({
     type: "POST",
     url: 'conexao.php',
     dataType: 'json',
-    data: {functionname: 'add', arguments: [1, 2]},
+    data: {candidates: [votosObj[0].numero, votosObj[1].numero]},
 
     success: function (obj, textstatus) {
-                  if( !('error' in obj) ) {
-                      console.log("foi")
-                  }
-                  else {
-                    console.log("N foi")
-                  }
+              if( !('error' in obj) ) {
+                  let yourVariable = obj.result;
+                  console.log(yourVariable);
+              }
+              else {
+                  console.log(obj.error);
+              }
             }
-});
+  });
 }
 
 ajax('etapas.json', 'GET', (response) => {
@@ -242,8 +252,7 @@ function confirmar() {
     return
   }
 
-  console.log("Votos aqui:")
-  console.log(votos)
+
 
   if (etapas[etapaAtual + 1]) {
     etapaAtual++
@@ -251,6 +260,7 @@ function confirmar() {
     document.querySelector('.tela').innerHTML = `
       <div class="fim">FIM</div>
     `
+    salvarVotos(votos)
   }
 
   (new Audio('audio/se3.mp3')).play()
