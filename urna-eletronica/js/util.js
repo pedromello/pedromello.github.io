@@ -1,3 +1,10 @@
+/**
+ * Função para chamada Ajax
+ * 
+ * @param {string} url - URL para chamada Ajax
+ * @param {string} method - Método de chamada Ajax
+ * @param {Function} callback - Função de callback
+ */
 function ajax(url, method, callback) {
   let request = new XMLHttpRequest();
   request.overrideMimeType("application/json");
