@@ -221,6 +221,9 @@ function confirmar() {
     return
   }
 
+  
+  console.log(votos)
+
   if (etapas[etapaAtual + 1]) {
     etapaAtual++
   } else {
