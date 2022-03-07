@@ -18,6 +18,8 @@ var etapas = null
 var numeroDigitado = ''
 var votoEmBranco = false
 
+console.log("Atualizacao 1")
+
 ajax('etapas.json', 'GET', (response) => {
   etapas = JSON.parse(response)
   console.log(etapas)
