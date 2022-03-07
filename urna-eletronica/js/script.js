@@ -18,7 +18,26 @@ var etapas = null
 var numeroDigitado = ''
 var votoEmBranco = false
 
-console.log("Atualizacao 1")
+console.log("Atualizacao 2")
+
+const jqueryButton = document.querySelector(`#jquery-ajax`)
+jqueryButton.onclick = () => {
+  jQuery.ajax({
+    type: "POST",
+    url: 'conexao.php',
+    dataType: 'json',
+    data: {functionname: 'add', arguments: [1, 2]},
+
+    success: function (obj, textstatus) {
+                  if( !('error' in obj) ) {
+                      console.log("foi")
+                  }
+                  else {
+                    console.log("N foi")
+                  }
+            }
+});
+}
 
 ajax('etapas.json', 'GET', (response) => {
   etapas = JSON.parse(response)
